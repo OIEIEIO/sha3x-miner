@@ -564,9 +564,21 @@
 
         // Update dashboard elements
         function updateDashboard(data) {
-            // Enhanced Overview section with CPU/GPU system usage
-            const cpuHashrate = data.current_hashrate || 0;
-            const gpuHashrate = 0; // TODO: Add GPU mining hashrate when implemented
+            // HARDCODED: GPU-only mining detection and hashrate assignment
+            let cpuHashrate = 0;
+            let gpuHashrate = 0;
+            
+            // Simple GPU detection: If GPU detected and high utilization, it's GPU mining
+            if (data.gpu_info && data.gpu_info.detected && data.gpu_info.utilization > 80) {
+                // GPU-only mining mode
+                gpuHashrate = data.current_hashrate || 0;
+                cpuHashrate = 0;
+            } else {
+                // CPU mining mode (fallback)
+                cpuHashrate = data.current_hashrate || 0;
+                gpuHashrate = 0;
+            }
+            
             const totalHashrate = cpuHashrate + gpuHashrate;
             
             // Update total hashrate
