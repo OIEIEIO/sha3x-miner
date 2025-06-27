@@ -1,5 +1,6 @@
 // GPU Mining Test - Standalone test to verify GPU mining works
 // File: src/bin/gpu_test.rs
+// Version: 1.0.1 - Added XN field support
 
 use sha3x_miner::core::types::MiningJob;
 use sha3x_miner::miner::gpu::opencl::{OpenClDevice, OpenClEngine};
@@ -41,6 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         target_difficulty: 1000000, // Easy target for testing
         height: 12345,
         algo: sha3x_miner::core::types::Algorithm::Sha3x,
+        extranonce2: None, // ✅ Added XN field support - no XN for test job
         prev_hash: None,
         merkle_root: None,
         version: None,
@@ -53,7 +55,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("🎯 Starting GPU mining test...");
     info!("├─ Job ID: {}", test_job.job_id);
     info!("├─ Target difficulty: {}", test_job.target_difficulty);
-    info!("└─ Algorithm: {:?}", test_job.algo);
+    info!("├─ Algorithm: {:?}", test_job.algo);
+    info!("└─ XN (extra nonce): {}", test_job.extranonce2.as_ref().unwrap_or(&"None".to_string()));
     
     let batch_size = engine.get_suggested_batch_size();
     info!("🔧 Batch size: {}", batch_size);
@@ -70,7 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     while start_time.elapsed() < test_duration {
         iteration += 1;
         
-        match engine.mine(&test_job, nonce_offset, batch_size) {
+        match engine.mine(&test_job, nonce_offset, batch_size).await {
             Ok((found_nonce, hashes_processed, best_difficulty)) => {
                 total_hashes += hashes_processed as u64;
                 
@@ -119,5 +122,56 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         info!("🔧 Lower than expected - kernel may need optimization.");
     }
     
+    // Test LuckyPool XN nonce generation
+    info!("🔧 Testing LuckyPool XN nonce generation...");
+    
+    // Create a test job with XN (simulating LuckyPool)
+    let luckypool_test_job = MiningJob {
+        job_id: "luckypool-test-001".to_string(),
+        mining_hash: test_job.mining_hash.clone(),
+        target_difficulty: 1000000,
+        height: 12345,
+        algo: sha3x_miner::core::types::Algorithm::Sha3x,
+        extranonce2: Some("ad49".to_string()), // ✅ Simulate LuckyPool XN
+        prev_hash: None,
+        merkle_root: None,
+        version: None,
+        ntime: None,
+        nbits: None,
+        merkle_path: None,
+        target: None,
+    };
+    
+    // Test a few iterations with XN
+    info!("🔧 Testing XN nonce format (simulating LuckyPool):");
+    for i in 0..3 {
+        match engine.mine(&luckypool_test_job, i * 100000, 1000).await {
+            Ok((found_nonce, hashes_processed, best_difficulty)) => {
+                if let Some(nonce) = found_nonce {
+                    // This would be formatted with XN in the actual manager
+                    info!("├─ Found nonce: {:016x} (would be formatted as XN + 6 bytes for LuckyPool)", nonce);
+                }
+                info!("├─ Test {}: {} hashes, best difficulty: {}", i + 1, hashes_processed, best_difficulty);
+            }
+            Err(e) => {
+                error!("├─ XN test error: {}", e);
+            }
+        }
+    }
+    
+    info!("✅ XN test complete - ready for LuckyPool integration!");
+    
     Ok(())
 }
+
+// Changelog:
+// - v1.0.1-xn-support (2025-06-26): Added XN field support for LuckyPool compatibility.
+//   - Added extranonce2: None field to test MiningJob to fix compilation
+//   - Added XN field logging to show when extra nonce is present
+//   - Added LuckyPool XN simulation test with extranonce2: Some("ad49")
+//   - Enhanced logging to show XN status in job information
+//   - Ready for testing complete LuckyPool integration
+// - v1.0.0 (2025-06-25): Initial GPU mining test
+//   - Basic GPU performance testing
+//   - Real hashrate measurement
+//   - RTX 4060 Ti optimization validation

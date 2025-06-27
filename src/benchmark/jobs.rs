@@ -256,6 +256,7 @@ fn create_easy_sha256_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: 0, // Placeholder, unused for SHA-256
             height: 665, // From SV2 job 663
             algo: Algorithm::Sha256,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: Some(536870912), // From SV2
@@ -282,6 +283,7 @@ fn create_medium_sha256_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: 0, // Placeholder, unused for SHA-256
             height: 665,
             algo: Algorithm::Sha256,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: Some(536870912),
@@ -308,6 +310,7 @@ fn create_hard_sha256_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: 0, // Placeholder, unused for SHA-256
             height: 665,
             algo: Algorithm::Sha256,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: Some(536870912),
@@ -336,6 +339,7 @@ fn create_easy_sha3x_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: u64_difficulty,
             height: 100000,
             algo: Algorithm::Sha3x,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: None,
@@ -363,6 +367,7 @@ fn create_medium_sha3x_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: u64_difficulty,
             height: 200000,
             algo: Algorithm::Sha3x,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: None,
@@ -390,6 +395,7 @@ fn create_hard_sha3x_job(difficulty: f64) -> BenchmarkJob {
             target_difficulty: u64_difficulty,
             height: 300000,
             algo: Algorithm::Sha3x,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: None,
@@ -455,6 +461,7 @@ pub fn create_custom_job(difficulty: u64, job_suffix: &str) -> BenchmarkJob {
             target_difficulty: difficulty,
             height: 500000,
             algo: Algorithm::Sha3x,
+            extranonce2: None,
             prev_hash: None,
             merkle_root: None,
             version: None,

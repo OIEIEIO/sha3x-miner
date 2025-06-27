@@ -91,7 +91,26 @@ fn mining_thread(
                             hash_count += 1;
 
                             if difficulty >= job.target_difficulty {
-                                let nonce_hex_le = hex::encode(batch_nonce.to_le_bytes());
+                                // Convert local nonce to bytes (use only 6 least-significant bytes)
+let local_nonce = batch_nonce.to_le_bytes();
+
+// Decode XN (2 bytes) from job.extranonce2
+let xn = hex::decode(&job.extranonce2.clone().unwrap_or_default()).unwrap_or(vec![0, 0]);
+
+// Compose full 8-byte nonce: [XN][Local Nonce]
+let full_nonce = [
+    xn.get(0).copied().unwrap_or(0),
+    xn.get(1).copied().unwrap_or(0),
+    local_nonce[0],
+    local_nonce[1],
+    local_nonce[2],
+    local_nonce[3],
+    local_nonce[4],
+    local_nonce[5],
+];
+
+// Encode as hex string
+let nonce_hex_le = hex::encode(full_nonce);
                                 let nonce_hex_be = hex::encode(batch_nonce.to_be_bytes());
                                 let result_hex = hex::encode(hash);
 

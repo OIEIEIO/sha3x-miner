@@ -6,7 +6,7 @@
 // via pull requests to the project repository.
 //
 // File: src/miner/gpu/mod.rs
-// Version: 1.1.0
+// Version: 1.2.0-hybrid
 // Developer: OIEIEIO <oieieio@protonmail.com>
 //
 // This file is the module entry point for GPU mining functionality in the SHA3x miner.
@@ -16,30 +16,30 @@
 // - OpenCL GPU mining for NVIDIA, AMD, and Intel GPUs
 // - Parallel GPU and CPU mining coordination
 // - Integrated stats and monitoring
-// - Optional compilation via the "gpu" feature flag
+// - Optional compilation via the "gpu" or "hybrid" feature flags
 
-// GPU mining is only available when the "gpu" feature is enabled
-#[cfg(feature = "gpu")]
+// GPU mining is available when either "gpu" or "hybrid" feature is enabled
+#[cfg(any(feature = "gpu", feature = "hybrid"))]
 pub mod opencl;
 
-#[cfg(feature = "gpu")]
+#[cfg(any(feature = "gpu", feature = "hybrid"))]
 pub mod manager;
 
-#[cfg(feature = "gpu")]
-pub mod gpu_miner;  // Add this line
+#[cfg(any(feature = "gpu", feature = "hybrid"))]
+pub mod gpu_miner;
 
-// Re-export key types when GPU feature is enabled
-#[cfg(feature = "gpu")]
+// Re-export key types when GPU features are enabled
+#[cfg(any(feature = "gpu", feature = "hybrid"))]
 pub use manager::GpuManager;
 
-#[cfg(feature = "gpu")]
-pub use gpu_miner::GpuMiner;  // Add this line
+#[cfg(any(feature = "gpu", feature = "hybrid"))]
+pub use gpu_miner::GpuMiner;
 
-// Placeholder for when GPU feature is disabled
-#[cfg(not(feature = "gpu"))]
+// Placeholder for when GPU features are disabled
+#[cfg(not(any(feature = "gpu", feature = "hybrid")))]
 pub struct GpuManager;
 
-#[cfg(not(feature = "gpu"))]
+#[cfg(not(any(feature = "gpu", feature = "hybrid")))]
 impl GpuManager {
     pub fn new() -> Self {
         Self
@@ -51,6 +51,10 @@ impl GpuManager {
 }
 
 // Changelog:
+// - v1.2.0-hybrid (2025-06-25): Added hybrid feature support
+//   - Changed feature gates from feature = "gpu" to any(feature = "gpu", feature = "hybrid")
+//   - Enables GPU modules when either gpu or hybrid features are active
+//   - Supports both standalone GPU mode and hybrid CPU+GPU mode
 // - v1.1.0 (2025-06-24): Added GpuMiner support
 //   - Added gpu_miner module declaration for GPU-only mining
 //   - Added GpuMiner re-export for direct GPU mining capabilities  

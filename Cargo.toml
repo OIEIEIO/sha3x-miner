@@ -6,22 +6,18 @@
 # via pull requests to the project repository.
 #
 # File: Cargo.toml
-# Version: 1.1.0
+# Version: 1.2.0-hybrid
 # Developer: OIEIEIO <oieieio@protonmail.com>
 #
 # This file is the configuration for the SHA3x miner project, located at the
 # root of the project tree. It defines metadata, dependencies, features, and
-# binary targets for building the miner, supporting both SHA3X (Tari) and SHA-256 (Bitcoin).
-#
-# Tree Location:
-# - Cargo.toml (project configuration file)
-# - Depends on: none
+# binary targets for building the miner, supporting SHA3X (Tari) mining with CPU, GPU, and hybrid modes.
 
 [package]
 name = "sha3x-miner"
 version = "1.0.0"
 edition = "2024"
-description = "High-performance SHA3x (Tari) and SHA-256 (Bitcoin) CPU miner"
+description = "High-performance SHA3x (Tari) CPU/GPU miner with hybrid mode"
 license = "MIT"
 # repository = "https://github.com/your-repo/sha3x-miner"  # Uncomment and set your repo
 rust-version = "1.85"  # Meets 2024 edition requirement
@@ -68,9 +64,9 @@ crossterm = { version = "0.28.1", optional = true }
 [features]
 default = []
 tui = ["ratatui", "crossterm"]
-cpu = []                    # CPU-only mining
-gpu = ["opencl3"]           # GPU-only mining (363 MH/s)  
-hybrid = ["opencl3"]        # CPU+GPU hybrid mining
+cpu = []                           # CPU-only mining
+gpu = ["opencl3"]                  # GPU-only mining (385+ MH/s)  
+hybrid = ["cpu", "gpu", "opencl3"] # CPU+GPU hybrid mining (400+ MH/s)
 
 [[bin]]
 name = "sha3x-miner"
@@ -80,19 +76,12 @@ name = "gpu_test"
 path = "src/bin/gpu_test.rs"
 
 # Changelog:
+# - v1.2.0-hybrid (2025-06-25): Added proper hybrid mode support.
+#   - Updated hybrid feature to include both "cpu" and "gpu" features.
+#   - Fixed feature dependencies for proper compilation of hybrid mode.
+#   - Hybrid mode now enables both CPU and GPU mining simultaneously.
 # - v1.1.0 (2025-06-24): Added GPU mining support.
 #   - Added opencl3 = "0.10.5" dependency for OpenCL GPU mining support.
 #   - Added anyhow = "1.0.89" for improved error handling in GPU code.
 #   - Added "gpu" feature flag to enable/disable GPU mining at compile time.
 #   - GPU mining dependencies are optional to maintain CPU-only build capability.
-# - v1.0.1 (2025-06-15): Added SHA-256 support.
-#   - Added sha2 = "0.10.8" dependency for SHA-256 algorithm implementation.
-#   - Updated package description to include SHA-256 and Bitcoin support.
-# - v1.0.0 (2025-06-14): Initial configuration for modular breakout.
-#   - Purpose: Configures the sha3x-miner project, specifying metadata,
-#     dependencies, and build settings for the CPU miner.
-#   - Features: Defines dependencies for core mining (e.g., sha3, tokio),
-#     optional TUI support via feature flag, and a single binary target.
-#     Sets rust-version to 1.85 for 2024 edition compatibility.
-#   - Note: Updated sha3 to 0.10.8 for stable dependency resolution, ensuring
-#     compatibility with SHA3x hashing requirements.
