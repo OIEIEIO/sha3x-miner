@@ -24,32 +24,88 @@
 
         /* Light theme */
         body.light-theme {
-            background: linear-gradient(135deg, #f0f2f0 0%, #e8f4fd 100%);
-            color: #333;
+            background: linear-gradient(135deg, #F5F7FA 0%, #E6EFFA 100%);
+            color: #1A2526;
         }
 
         body.light-theme .stat-card,
         body.light-theme .tab-content,
         body.light-theme .tab-nav {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            background: rgba(249, 250, 251, 0.75);
+            color: #1A2526;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         body.light-theme .tab-btn {
-            color: rgba(0, 0, 0, 0.7);
+            color: #455A64;
         }
 
         body.light-theme .tab-btn.active,
         body.light-theme .tab-btn:hover {
-            color: #333;
+            color: #1A2526;
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom-color: #2E7D32;
         }
 
         body.light-theme canvas {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         body.light-theme .stat-card h3 {
-            color: #2e7d32;
+            color: #2E7D32;
+        }
+
+        body.light-theme .stat-value {
+            color: #1A2526;
+        }
+
+        body.light-theme .stat-label {
+            color: #455A64;
+        }
+
+        body.light-theme .header h1 {
+            color: #1A2526;
+        }
+
+        body.light-theme #current-job-info div,
+        body.light-theme #recent-jobs div,
+        body.light-theme #recent-shares div,
+        body.light-theme #top-shares div {
+            color: #1A2526;
+            background: rgba(209, 213, 219, 0.6); /* Darker gray background */
+        }
+
+        body.light-theme #current-job-info span,
+        body.light-theme #recent-jobs span,
+        body.light-theme #recent-shares span,
+        body.light-theme #top-shares span {
+            color: #455A64;
+        }
+
+        body.light-theme #current-job-info .job-id,
+        body.light-theme #recent-jobs .job-id {
+            color: #1976D2;
+        }
+
+        body.light-theme #current-job-info .height-value,
+        body.light-theme #recent-jobs .height-value,
+        body.light-theme #recent-shares .share-thread,
+        body.light-theme #recent-shares .luck-factor {
+            color: #2E7D32;
+        }
+
+        body.light-theme #current-job-info .difficulty-value,
+        body.light-theme #recent-jobs .difficulty-value {
+            color: #1976D2;
+        }
+
+        body.light-theme #current-job-info .no-job,
+        body.light-theme #recent-jobs .no-job,
+        body.light-theme #recent-shares .no-shares,
+        body.light-theme #top-shares .no-shares {
+            color: #455A64;
         }
 
         /* Theme toggle button */
@@ -76,7 +132,7 @@
 
         body.light-theme .theme-toggle {
             background: rgba(0, 0, 0, 0.1);
-            color: #333;
+            color: #1A2526;
         }
 
         body.light-theme .theme-toggle:hover {
@@ -241,7 +297,6 @@
                 grid-template-columns: 1fr;
             }
             
-            /* Stack cards vertically on mobile */
             .stats-grid .stat-card {
                 grid-column: span 1 !important;
             }
@@ -336,6 +391,7 @@
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="stat-label">Acceptance: <span id="acceptance-rate">0%</span></div>
+                            <div class="stat-label">Avg Share Time: <span id="avg-share-time">--</span></div>
                             <div class="stat-label">Last Share: <span id="time-since-last">0s</span></div>
                         </div>
                     </div>
@@ -358,7 +414,7 @@
                     <div class="stat-card">
                         <h3>⚡ CPU Performance</h3>
                         <div class="stat-value" id="cpu-usage">0%</div>
-                        <div class="stat-label">CPU Usage <span id="cpu-current" style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">(Live: 0%)</span></div>
+                        <div class="stat-label">CPU Usage <span id="cpu-current" style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">(<span id="cpu-current-value">0%</span>)</div>
                         <div style="margin-top: 15px;">
                             <div class="stat-label">Memory: <span id="memory-usage">0%</span> (<span id="memory-used">0 GB</span> / <span id="memory-total">0 GB</span>)</div>
                             <div class="stat-label">Active Threads: <span id="active-threads">0</span> / <span id="cpu-cores">0</span> cores</div>
@@ -411,14 +467,14 @@
                         <div>
                             <h4 style="color: #4CAF50; margin-bottom: 10px;">Current Job</h4>
                             <div id="current-job-info" style="font-family: monospace; font-size: 0.9rem;">
-                                <div style="color: rgba(255,255,255,0.6);">Waiting for job...</div>
+                                <div class="no-job" style="color: rgba(255,255,255,0.6);">Waiting for job...</div>
                             </div>
                         </div>
                         <!-- Recent Jobs -->
                         <div>
                             <h4 style="color: #4CAF50; margin-bottom: 10px;">Recent Jobs (Last 5)</h4>
                             <div id="recent-jobs" style="font-family: monospace; font-size: 0.85rem; max-height: 120px; overflow-y: auto;">
-                                <div style="color: rgba(255,255,255,0.6);">No job history yet...</div>
+                                <div class="no-job" style="color: rgba(255,255,255,0.6);">No job history yet...</div>
                             </div>
                         </div>
                     </div>
@@ -430,7 +486,7 @@
                     <div class="stat-card" style="height: 300px;">
                         <h3>💎 Recent Shares Found</h3>
                         <div id="recent-shares" style="height: 240px; overflow-y: auto; font-family: monospace; font-size: 0.85rem;">
-                            <div style="color: rgba(255,255,255,0.6); text-align: center; padding: 20px;">
+                            <div class="no-shares" style="color: rgba(255,255,255,0.6); text-align: center; padding: 20px;">
                                 Waiting for shares...
                             </div>
                         </div>
@@ -440,7 +496,7 @@
                     <div class="stat-card" style="height: 300px;">
                         <h3>🏆 Top 5 Shares</h3>
                         <div id="top-shares" style="height: 240px; display: flex; flex-direction: column; justify-content: center;">
-                            <div style="color: rgba(255,255,255,0.6); text-align: center;">
+                            <div class="no-shares" style="color: rgba(255,255,255,0.6); text-align: center;">
                                 No shares yet
                             </div>
                         </div>
@@ -492,26 +548,22 @@
         let socket;
         let chartsInitialized = false;
         let charts = {};
-        let lastShareCount = 0;  // Track total shares to calculate rate
-        let cpuUsageHistory = [];  // Track CPU usage for moving average
+        let lastShareCount = 0;
+        let cpuUsageHistory = [];
 
         // Tab switching function
         function switchTab(tabName) {
-            // Hide all tab panes
             document.querySelectorAll('.tab-pane').forEach(pane => {
                 pane.classList.remove('active');
             });
             
-            // Remove active class from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Show selected tab and activate button
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
             
-            // Initialize charts when charts tab is first opened
             if (tabName === 'charts' && !chartsInitialized) {
                 initializeCharts();
                 chartsInitialized = true;
@@ -546,7 +598,6 @@
                     console.log('📊 Real miner connection lost - check if miner is running with --web flag');
                     document.getElementById('connection-status').textContent = 'Disconnected - Start miner with --web';
                     document.getElementById('connection-status').style.color = '#f44336';
-                    // Attempt reconnection after 5 seconds
                     setTimeout(initWebSocket, 5000);
                 };
                 
@@ -564,43 +615,30 @@
 
         // Update dashboard elements
         function updateDashboard(data) {
-            // HARDCODED: GPU-only mining detection and hashrate assignment
             let cpuHashrate = 0;
             let gpuHashrate = 0;
             
-            // Simple GPU detection: If GPU detected and high utilization, it's GPU mining
             if (data.gpu_info && data.gpu_info.detected && data.gpu_info.utilization > 80) {
-                // GPU-only mining mode
                 gpuHashrate = data.current_hashrate || 0;
                 cpuHashrate = 0;
             } else {
-                // CPU mining mode (fallback)
                 cpuHashrate = data.current_hashrate || 0;
                 gpuHashrate = 0;
             }
             
             const totalHashrate = cpuHashrate + gpuHashrate;
             
-            // Update total hashrate
             document.getElementById('total-hashrate').textContent = 
                 (totalHashrate / 1000000).toFixed(2) + ' MH/s';
             
-            // Update CPU mining hashrate
             document.getElementById('cpu-hashrate').textContent = 
                 (cpuHashrate / 1000000).toFixed(2) + ' MH/s';
             
-            // Update GPU mining hashrate  
             document.getElementById('gpu-hashrate').textContent = 
                 (gpuHashrate / 1000000).toFixed(2) + ' MH/s';
             
-            // Update algorithm
             document.getElementById('algorithm').textContent = data.algorithm || 'SHA3x';
             
-            // Update system usage percentages (will be set later in system_info section)
-            // CPU usage will be updated when we process system_info
-            // GPU usage will be updated when we process gpu_info
-
-            // Work & Performance section (merged)
             document.getElementById('total-work').textContent = formatNumber(data.total_work || 0);
             document.getElementById('work-efficiency').textContent = (data.work_efficiency || 0).toFixed(1) + '%';
             document.getElementById('average-luck').textContent = (data.average_luck || 0).toFixed(2) + 'x';
@@ -608,32 +646,26 @@
                 formatNumber(data.top_shares[0]) : '0';
             document.getElementById('share-rate').textContent = (data.share_rate || 0).toFixed(1) + '/min';
 
-            // Mining stats
             document.getElementById('accepted-shares').textContent = data.accepted_shares || 0;
             document.getElementById('submitted-shares').textContent = data.submitted_shares || 0;
             document.getElementById('rejected-shares').textContent = data.rejected_shares || 0;
             document.getElementById('acceptance-rate').textContent = (data.acceptance_rate || 0).toFixed(1) + '%';
             document.getElementById('time-since-last').textContent = formatDuration(data.time_since_last_share || 0);
+            document.getElementById('avg-share-time').textContent = data.avg_share_time !== null ? 
+                formatDuration(data.avg_share_time) : '--';
             
-            // System info with both current and average CPU display + new system details
             if (data.system_info) {
-                // Add current CPU usage to history
                 cpuUsageHistory.push(data.system_info.cpu_usage);
-                
-                // Keep only last 10 readings (10 seconds of history)
                 if (cpuUsageHistory.length > 10) {
                     cpuUsageHistory.shift();
                 }
                 
-                // Calculate moving average
                 const avgCpuUsage = cpuUsageHistory.reduce((sum, usage) => sum + usage, 0) / cpuUsageHistory.length;
                 const currentCpuUsage = data.system_info.cpu_usage;
                 
-                // Update CPU Performance card
                 document.getElementById('cpu-usage').textContent = avgCpuUsage.toFixed(1) + '%';
-                document.getElementById('cpu-current').textContent = `(Live: ${currentCpuUsage.toFixed(1)}%)`;
+                document.getElementById('cpu-current-value').textContent = `Live: ${currentCpuUsage.toFixed(1)}%`;
                 
-                // Update CPU usage in Mining Overview
                 document.getElementById('cpu-usage-overview').textContent = currentCpuUsage.toFixed(1) + '%';
                 
                 document.getElementById('memory-usage').textContent = data.system_info.memory_usage.toFixed(1) + '%';
@@ -644,7 +676,6 @@
                 document.getElementById('cpu-temp').textContent = data.system_info.cpu_temperature ? 
                     data.system_info.cpu_temperature.toFixed(1) + '°C' : '--°C';
                 
-                // Update System Information card
                 document.getElementById('cpu-name').textContent = data.system_info.cpu_name || 'Unknown';
                 document.getElementById('cpu-cores-display').textContent = data.system_info.cpu_cores || 0;
                 document.getElementById('memory-total-display').textContent = (data.system_info.memory_total / (1024**3)).toFixed(1);
@@ -655,7 +686,6 @@
                     data.system_info.max_temperature.toFixed(1) + '°C' : '--°C';
             }
 
-            // Update GPU Performance card with real data
             console.log('🔧 GPU data received:', !!data.gpu_info);
             if (data.gpu_info) {
                 console.log('🔧 GPU info:', data.gpu_info);
@@ -663,14 +693,11 @@
                 if (data.gpu_info.detected) {
                     console.log('🔧 GPU detected, updating display');
                     
-                    // Update GPU usage
                     document.getElementById('gpu-usage').textContent = data.gpu_info.utilization ? 
                         data.gpu_info.utilization.toFixed(0) + '%' : '--';
                     
-                    // Update GPU name
                     document.getElementById('gpu-name').textContent = data.gpu_info.name || 'Unknown GPU';
                     
-                    // Format GPU memory
                     if (data.gpu_info.memory_used !== null && data.gpu_info.memory_used !== undefined && 
                         data.gpu_info.memory_total !== null && data.gpu_info.memory_total !== undefined) {
                         const memUsedGB = (data.gpu_info.memory_used / 1024).toFixed(1);
@@ -680,20 +707,15 @@
                         document.getElementById('gpu-memory').textContent = '-- / -- GB';
                     }
                     
-                    // Update temperature
                     document.getElementById('gpu-temp').textContent = data.gpu_info.temperature ? 
                         data.gpu_info.temperature.toFixed(0) + '°C' : '--°C';
                     
-                    // Update power
                     document.getElementById('gpu-power').textContent = data.gpu_info.power_usage ? 
                         data.gpu_info.power_usage.toFixed(0) + ' W' : '-- W';
                     
-                    // Update GPU usage in Mining Overview
                     document.getElementById('gpu-usage-overview').textContent = data.gpu_info.utilization ? 
                         data.gpu_info.utilization.toFixed(1) + '%' : '0%';
                     
-                    
-                    // Update GPU card styling to show detection
                     const gpuCard = document.getElementById('gpu-name').closest('.stat-card');
                     if (gpuCard) {
                         gpuCard.style.borderLeft = '4px solid #4CAF50';
@@ -702,17 +724,14 @@
                 } else {
                     console.log('🔧 GPU not detected');
                     
-                    // GPU not detected - update Mining Overview
                     document.getElementById('gpu-usage-overview').textContent = '0%';
                     
-                    // GPU not detected
                     document.getElementById('gpu-usage').textContent = '--';
                     document.getElementById('gpu-name').textContent = 'Not detected';
                     document.getElementById('gpu-memory').textContent = '-- / -- GB';
                     document.getElementById('gpu-temp').textContent = '--°C';
                     document.getElementById('gpu-power').textContent = '-- W';
                     
-                    // Update GPU card styling
                     const gpuCard = document.getElementById('gpu-name').closest('.stat-card');
                     if (gpuCard) {
                         gpuCard.style.borderLeft = '4px solid #666';
@@ -721,7 +740,6 @@
             } else {
                 console.log('🔧 No gpu_info field in WebSocket data - check backend');
                 
-                // No GPU data from backend
                 document.getElementById('gpu-usage').textContent = '??';
                 document.getElementById('gpu-name').textContent = 'No GPU data from backend';
                 document.getElementById('gpu-memory').textContent = '?? / ?? GB';
@@ -729,18 +747,15 @@
                 document.getElementById('gpu-power').textContent = '?? W';
             }
             
-            // Update pool connection info
             if (data.pool_info) {
                 document.getElementById('pool-status').textContent = data.pool_info.is_connected ? 'Connected' : 'Disconnected';
                 document.getElementById('pool-address').textContent = data.pool_info.pool_address || 'Unknown';
-                // Display latency with live indicator
                 document.getElementById('pool-latency').textContent = data.pool_info.latency_ms ? 
                     data.pool_info.latency_ms + 'ms (live)' : '--ms';
                 document.getElementById('pool-attempts').textContent = data.pool_info.connection_attempts || 0;
                 document.getElementById('pool-uptime').textContent = data.pool_info.uptime_seconds ? 
                     formatDuration(data.pool_info.uptime_seconds) : '--';
                 
-                // Update status indicator color
                 const statusElement = document.querySelector('.status-online');
                 const indicator = document.querySelector('.status-indicator');
                 if (data.pool_info.is_connected) {
@@ -752,19 +767,15 @@
                 }
             }
             
-            // Update miner uptime
             const uptime = new Date((data.uptime || 0) * 1000).toISOString().substr(11, 8);
             document.getElementById('uptime').textContent = uptime;
 
-            // Update job information
             updateJobInfo(data.current_job, data.recent_jobs, data);
-
-            // Update shares displays
             updateRecentShares(data.recent_shares);
             updateTopShares(data.top_shares);
         }
 
-        // Format large numbers (like your console output)
+        // Format large numbers
         function formatNumber(num) {
             if (num >= 1_000_000_000) {
                 return (num / 1_000_000_000).toFixed(1) + 'B';
@@ -777,91 +788,83 @@
             }
         }
 
-        // Format duration like your console output
+        // Format duration for seconds or minutes
         function formatDuration(seconds) {
             if (seconds < 60) {
-                return seconds + 's';
-            } else if (seconds < 3600) {
-                return Math.floor(seconds / 60) + 'm';
+                return Math.round(seconds) + 's';
             } else {
-                return (seconds / 3600).toFixed(1) + 'h';
+                return Math.round(seconds / 60) + 'm';
             }
         }
 
         // Update job information display
         function updateJobInfo(currentJob, recentJobs, data) {
-            // Update current job
             const currentJobDiv = document.getElementById('current-job-info');
             if (currentJob) {
                 currentJobDiv.innerHTML = `
                     <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                        <div style="color: #FFD700; font-weight: bold;">${currentJob.job_id}</div>
+                        <div class="job-id" style="color: #FFD700; font-weight: bold;">${currentJob.job_id}</div>
                         <div style="margin-top: 5px;">
                             <span style="color: rgba(255,255,255,0.8);">Height:</span> 
-                            <span style="color: #4CAF50; font-weight: bold;">${currentJob.block_height}</span>
+                            <span class="height-value" style="color: #4CAF50; font-weight: bold;">${currentJob.block_height}</span>
                         </div>
                         <div>
                             <span style="color: rgba(255,255,255,0.8);">Difficulty:</span> 
-                            <span style="color: #2196F3; font-weight: bold;">${formatNumber(currentJob.difficulty)}</span>
+                            <span class="difficulty-value" style="color: #2196F3; font-weight: bold;">${formatNumber(currentJob.difficulty)}</span>
                         </div>
                     </div>
                 `;
             } else {
-                currentJobDiv.innerHTML = '<div style="color: rgba(255,255,255,0.6);">Waiting for job...</div>';
+                currentJobDiv.innerHTML = '<div class="no-job" style="color: rgba(255,255,255,0.6);">Waiting for job...</div>';
             }
 
-            // Update recent jobs
             const recentJobsDiv = document.getElementById('recent-jobs');
             if (recentJobs && recentJobs.length > 0) {
                 const jobsHtml = recentJobs.map((job, index) => {
                     const isLatest = index === recentJobs.length - 1;
                     return `
                         <div style="padding: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); ${isLatest ? 'background: rgba(76,175,80,0.1);' : ''}">
-                            <span style="color: ${isLatest ? '#FFD700' : '#FFC107'};">${job.job_id}</span>
-                            <span style="color: rgba(255,255,255,0.6); margin-left: 10px;">Height: ${job.block_height}</span>
-                            <span style="color: rgba(255,255,255,0.6); margin-left: 10px;">Diff: ${formatNumber(job.difficulty)}</span>
+                            <span class="job-id" style="color: ${isLatest ? '#FFD700' : '#FFC107'};">${job.job_id}</span>
+                            <span style="color: rgba(255,255,255,0.6); margin-left: 10px;">Height: <span class="height-value">${job.block_height}</span></span>
+                            <span style="color: rgba(255,255,255,0.6); margin-left: 10px;">Diff: <span class="difficulty-value">${formatNumber(job.difficulty)}</span></span>
                             <span style="color: rgba(255,255,255,0.5); margin-left: 10px; font-size: 0.8rem;">${formatDuration(data.uptime - job.timestamp)} ago</span>
                         </div>
                     `;
-                }).reverse().join(''); // Reverse to show newest first
+                }).reverse().join('');
                 recentJobsDiv.innerHTML = jobsHtml;
             } else {
-                recentJobsDiv.innerHTML = '<div style="color: rgba(255,255,255,0.6);">No job history yet...</div>';
+                recentJobsDiv.innerHTML = '<div class="no-job" style="color: rgba(255,255,255,0.6);">No job history yet...</div>';
             }
         }
+
+        // Update recent shares
         function updateRecentShares(shares) {
             const container = document.getElementById('recent-shares');
             if (!shares || shares.length === 0) {
-                container.innerHTML = '<div style="color: rgba(255,255,255,0.6); text-align: center; padding: 20px;">No shares found yet...</div>';
+                container.innerHTML = '<div class="no-shares" style="color: rgba(255,255,255,0.6); text-align: center; padding: 20px;">No shares found yet...</div>';
                 return;
             }
 
             const shareElements = shares.map(share => {
                 const luckColor = share.luck_factor >= 2.0 ? '#4CAF50' : 
                                  share.luck_factor >= 1.0 ? '#FFC107' : '#f44336';
-                
-                // Format time since share was found
                 let timeStr;
                 if (share.timestamp < 60) {
                     timeStr = share.timestamp + 's ago';
-                } else if (share.timestamp < 3600) {
-                    const minutes = Math.floor(share.timestamp / 60);
-                    timeStr = minutes + 'm ago';
                 } else {
-                    const hours = Math.floor(share.timestamp / 3600);
-                    timeStr = hours + 'h ago';
+                    timeStr = Math.floor(share.timestamp / 60) + 'm ago';
                 }
                 
                 return `
                     <div style="padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="color: #4CAF50; font-weight: bold;">💎 Thread ${share.thread_id}</div>
+                            <div class="share-thread" style="color: #4CAF50; font-weight: bold;">💎 Thread ${share.thread_id}</div>
                             <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
                                 Submitted Diff: ${formatNumber(share.difficulty)} | Target Diff: ${formatNumber(share.target)}
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <div style="color: ${luckColor}; font-weight: bold;">${share.luck_factor.toFixed(2)}x</div>
+                            <div class="luck-factor" style="color: ${luckColor}; font-weight: bold;">${share.luck_factor.toFixed(2)}x</div>
                             <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">${timeStr}</div>
                         </div>
                     </div>
@@ -871,15 +874,14 @@
             container.innerHTML = shareElements;
         }
 
-        // Update top 5 shares - comma separated like console
+        // Update top 5 shares
         function updateTopShares(topShares) {
             const container = document.getElementById('top-shares');
             if (!topShares || topShares.length === 0) {
-                container.innerHTML = '<div style="color: rgba(255,255,255,0.6); text-align: center;">No shares yet</div>';
+                container.innerHTML = '<div class="no-shares" style="color: rgba(255,255,255,0.6); text-align: center;">No shares yet</div>';
                 return;
             }
 
-            // Format as comma-separated string like console output: "472.4M | 406.1M | 303.7M"
             const formattedShares = topShares.map(diff => formatNumber(diff)).join(' | ');
             
             container.innerHTML = `
@@ -900,7 +902,7 @@
         // Initialize charts
         function initializeCharts() {
             const isDarkTheme = document.body.classList.contains('dark-theme');
-            const textColor = isDarkTheme ? 'white' : '#333';
+            const textColor = isDarkTheme ? 'white' : '#1A2526';
             const gridColor = isDarkTheme ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
             
             const commonOptions = {
@@ -927,7 +929,6 @@
                 }
             };
 
-            // Hashrate Chart
             charts.hashrate = new Chart(document.getElementById('hashrateChart'), {
                 type: 'line',
                 data: {
@@ -959,7 +960,6 @@
                 }
             });
 
-            // Share Rate Chart
             charts.shares = new Chart(document.getElementById('shareChart'), {
                 type: 'bar',
                 data: {
@@ -985,7 +985,6 @@
                 }
             });
 
-            // Thread Performance Chart
             charts.threads = new Chart(document.getElementById('threadChart'), {
                 type: 'line',
                 data: {
@@ -1030,7 +1029,6 @@
                 }
             });
 
-            // Efficiency Chart
             charts.efficiency = new Chart(document.getElementById('efficiencyChart'), {
                 type: 'line',
                 data: {
@@ -1094,12 +1092,10 @@
             charts.hashrate.data.labels.push(timeLabel);
             charts.hashrate.data.datasets[0].data.push(hashrateInMH);
             
-            // Calculate moving average
             const recent = charts.hashrate.data.datasets[0].data.slice(-10);
             const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
             charts.hashrate.data.datasets[1].data.push(avg);
             
-            // Limit to 5 minutes of data (300 data points at 1-second intervals)
             const maxPoints = 300;
             if (charts.hashrate.data.labels.length > maxPoints) {
                 charts.hashrate.data.labels.shift();
@@ -1114,25 +1110,20 @@
             const now = new Date();
             const timeKey = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
             
-            // Check if we need to add a new minute bar
             const lastLabel = charts.shares.data.labels[charts.shares.data.labels.length - 1];
             const isNewMinute = charts.shares.data.labels.length === 0 || lastLabel !== timeKey;
             
             if (isNewMinute) {
-                // Add new bar for new minute
                 charts.shares.data.labels.push(timeKey);
                 charts.shares.data.datasets[0].data.push(0);
                 
-                // Keep only last 20 minutes
                 if (charts.shares.data.labels.length > 20) {
                     charts.shares.data.labels.shift();
                     charts.shares.data.datasets[0].data.shift();
                 }
                 
-                // Reset counter for new minute
                 lastShareCount = data.submitted_shares || 0;
             } else if (data.submitted_shares) {
-                // Update current minute's bar with new shares
                 const currentIndex = charts.shares.data.datasets[0].data.length - 1;
                 const newShares = data.submitted_shares - lastShareCount;
                 
@@ -1153,13 +1144,11 @@
 
             charts.threads.data.labels.push(timeLabel);
             
-            // Update each thread's data and show/hide based on activity
             data.thread_hashrates.forEach((hashrate, index) => {
                 if (charts.threads.data.datasets[index]) {
                     const hashrateInMH = hashrate / 1000000;
                     charts.threads.data.datasets[index].data.push(hashrateInMH);
                     
-                    // Show active threads, hide inactive ones
                     if (hashrateInMH > 0) {
                         charts.threads.data.datasets[index].hidden = false;
                     } else {
@@ -1168,12 +1157,10 @@
                 }
             });
             
-            // Hide unused datasets
             for (let i = data.thread_hashrates.length; i < charts.threads.data.datasets.length; i++) {
                 charts.threads.data.datasets[i].hidden = true;
             }
             
-            // Limit data points to keep chart readable
             const maxPoints = 60;
             if (charts.threads.data.labels.length > maxPoints) {
                 charts.threads.data.labels.shift();
@@ -1202,7 +1189,6 @@
             charts.efficiency.update('none');
         }
 
-        // Theme toggle functionality
         function toggleTheme() {
             const body = document.body;
             const themeButton = document.querySelector('.theme-toggle');
@@ -1219,16 +1205,14 @@
                 localStorage.setItem('theme', 'dark');
             }
             
-            // Update chart colors for new theme
             if (chartsInitialized) {
                 updateChartTheme();
             }
         }
 
-        // Update chart colors based on theme
         function updateChartTheme() {
             const isLight = document.body.classList.contains('light-theme');
-            const textColor = isLight ? '#333' : 'white';
+            const textColor = isLight ? '#1A2526' : 'white';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
             
             Object.values(charts).forEach(chart => {
@@ -1258,7 +1242,6 @@
             });
         }
 
-        // Initialize theme on page load
         function initializeTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             const body = document.body;
@@ -1273,7 +1256,6 @@
             }
         }
 
-        // Initialize when page loads
         window.addEventListener('load', function() {
             initializeTheme();
             initWebSocket();
